@@ -26,6 +26,7 @@ class JSProxy(Proxy):
         tmout = self.tmout
         if DBG and unsolved:
             print('\twill remain', unsolved )
+        solved = None
 
         while tmout>0:
             if cid in self.q_return:

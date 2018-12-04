@@ -20,26 +20,26 @@ PE = dict()
 PE["str"] = pe_str
 
 
-class PathEnd(object):
-    def __init__(self, host, fqn, default=None):
-        self.__fqn = fqn
-        self.__name = fqn.rsplit(".", 1)[-1]
-        self.__host = host
-        self.__host._cp_setup(self.__name, default)
-
-    def __get__(self, obj, objtype):
-        rv = self.__host[self.__name]
-        rv = PE.get(type(rv).__name__, pe_str)(rv)
-        rv.fqn = self.__fqn
-        if DBG:
-            print("27:pe-get", self.__fqn, "==", repr(rv))
-        if Proxy.get:
-            Proxy.get(self.__fqn, rv, **Proxy.cfg.get("get", {}))
-        return rv
-
-    def __set__(self, obj, val):
-        print("33:pe-set", self.__name)
-        self.__host[self.__name] = val
+#class PathEnd(object):
+#    def __init__(self, host, fqn, default=None):
+#        self.__fqn = fqn
+#        self.__name = fqn.rsplit(".", 1)[-1]
+#        self.__host = host
+#        self.__host._cp_setup(self.__name, default)
+#
+#    def __get__(self, obj, objtype):
+#        rv = self.__host[self.__name]
+#        rv = PE.get(type(rv).__name__, pe_str)(rv)
+#        rv.fqn = self.__fqn
+#        if DBG:
+#            print("27:pe-get", self.__fqn, "==", repr(rv))
+#        if Proxy.get:
+#            Proxy.get(self.__fqn, rv, **Proxy.cfg.get("get", {}))
+#        return rv
+#
+#    def __set__(self, obj, val):
+#        print("33:pe-set", self.__name)
+#        self.__host[self.__name] = val
 
 class Proxy:
 #FIXME provide loopback sample
@@ -111,9 +111,10 @@ class CallPath(dict):
         #setattr(self.__class__, name, PathEnd(self, fqn, value))
         self.proxy.set(fqn, value)
 
-    def __setitem__(self, name, v):
-        fqn = "%s.%s" % (self.__fqn, name)
-        setattr(self.__class__, key, PathEnd(host, fqn, default=v))
+#FIXME: caching type/value is flaky
+#    def __setitem__(self, name, v):
+#        fqn = "%s.%s" % (self.__fqn, name)
+#        setattr(self.__class__, key, PathEnd(host, fqn, default=v))
 
     def _cp_setup(self, key, v):
         if v is None:
